@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Portavex Labs</title>
+  <style>
+    /* ── Tokens ─────────────────────────────────────────────── */
+    :root {
+      --navy:    #0F172A;
+      --navy2:   #1E293B;
+      --slate:   #334155;
+      --muted:   #64748B;
+      --line:    #E2E8F0;
+      --off:     #F8FAFC;
+      --white:   #FFFFFF;
+      --blue:    #2563EB;
+      --blue2:   #1D4ED8;
+      --analyze: #2563EB;
+      --compare: #7C3AED;
+      --screen:  #0D9488;
+      --radius:  12px;
+      --max:     1080px;
+    }
+
+    /* ── Reset ──────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      background: var(--white);
+      color: var(--navy);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    /* ── Nav ────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(15,23,42,0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+    .nav-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .nav-diamond {
+      width: 36px; height: 36px;
+      position: relative;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .nav-diamond svg { width: 36px; height: 36px; }
+    .nav-brand {
+      font-size: 15px;
+      font-weight: 700;
+      color: #F8FAFC;
+      letter-spacing: 0.02em;
+    }
+    .nav-brand span {
+      display: block;
+      font-size: 9px;
+      font-weight: 500;
+      color: #64748B;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-top: -2px;
+    }
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 500;
+      color: #94A3B8;
+      transition: color 0.15s;
+      cursor: pointer;
+    }
+    .nav-links a:hover, .nav-links a.active { color: #F8FAFC; }
+    .nav-cta {
+      background: var(--blue);
+      color: #fff !important;
+      padding: 7px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      transition: background 0.15s !important;
+    }
+    .nav-cta:hover { background: var(--blue2) !important; color: #fff !important; }
+
+    /* ── Pages ──────────────────────────────────────────────── */
+    .page { display: none; min-height: 100vh; padding-top: 64px; }
+    .page.active { display: block; }
+
+    /* ── HOME ───────────────────────────────────────────────── */
+    .hero {
+      background: var(--navy);
+      min-height: calc(100vh - 64px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(37,99,235,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-diamond {
+      margin: 0 auto 40px;
+      width: 110px; height: 55px;
+      position: relative;
+    }
+    .hero-diamond svg { width: 100%; height: 100%; }
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 64px);
+      font-weight: 800;
+      color: #F8FAFC;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      line-height: 1;
+      margin-bottom: 8px;
+    }
+    .hero-sub {
+      font-size: 11px;
+      font-weight: 500;
+      color: #475569;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .hero-tagline {
+      font-size: 16px;
+      color: #94A3B8;
+      margin-bottom: 56px;
+      letter-spacing: 0.01em;
+    }
+    .hero-apps {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 56px;
+    }
+    .hero-app-pill {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .hero-app-pill:hover { border-color: rgba(255,255,255,0.25); background: rgba(255,255,255,0.09); }
+    .hero-app-pill .pill-letter {
+      width: 24px; height: 24px;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 800; color: #fff;
+    }
+    .hero-app-pill span { font-size: 13px; font-weight: 600; color: #CBD5E1; }
+    .hero-btn {
+      display: inline-block;
+      background: var(--blue);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 36px;
+      border-radius: 10px;
+      letter-spacing: 0.01em;
+      transition: background 0.15s, transform 0.1s;
+      cursor: pointer;
+    }
+    .hero-btn:hover { background: var(--blue2); transform: translateY(-1px); }
+
+    /* Mission strip */
+    .mission {
+      background: var(--off);
+      padding: 72px 24px;
+      text-align: center;
+    }
+    .mission-inner { max-width: 680px; margin: 0 auto; }
+    .eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--blue);
+      margin-bottom: 16px;
+    }
+    .mission h2 {
+      font-size: clamp(24px, 4vw, 36px);
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.2;
+      margin-bottom: 20px;
+    }
+    .mission p {
+      font-size: 16px;
+      color: var(--slate);
+      line-height: 1.75;
+    }
+
+    /* Home app cards */
+    .home-apps {
+      padding: 80px 24px;
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .section-header h2 {
+      font-size: clamp(22px, 3.5vw, 32px);
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 8px;
+    }
+    .section-header p {
+      font-size: 15px;
+      color: var(--muted);
+    }
+    .apps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+    .app-card {
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 28px;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s;
+    }
+    .app-card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); transform: translateY(-2px); }
+    .app-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .app-card.analyze::before { background: var(--analyze); }
+    .app-card.compare::before { background: var(--compare); }
+    .app-card.screen::before  { background: var(--screen); }
+    .app-icon-box {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; font-weight: 800; color: #fff;
+      margin-bottom: 18px;
+    }
+    .app-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--navy); }
+    .app-card .app-tagline { font-size: 13px; color: var(--muted); margin-bottom: 16px; font-style: italic; }
+    .app-card p { font-size: 14px; color: var(--slate); line-height: 1.7; margin-bottom: 20px; }
+    .app-pill-row { display: flex; gap: 6px; flex-wrap: wrap; }
+    .app-pill {
+      font-size: 11px; font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 100px;
+      border: 1px solid;
+    }
+
+    /* Disclaimer strip */
+    .disclaimer-strip {
+      background: var(--navy);
+      padding: 40px 24px;
+      text-align: center;
+    }
+    .disclaimer-strip p {
+      font-size: 12px;
+      color: #475569;
+      max-width: 640px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ── APPS PAGE ──────────────────────────────────────────── */
+    .apps-page { padding: 80px 24px; max-width: var(--max); margin: 0 auto; }
+    .apps-page-hero {
+      text-align: center;
+      margin-bottom: 72px;
+    }
+    .apps-page-hero h1 {
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 12px;
+    }
+    .apps-page-hero p {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 560px;
+      margin: 0 auto;
+    }
+    .app-detail {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+      padding: 56px 0;
+      border-top: 1px solid var(--line);
+    }
+    .app-detail:first-of-type { border-top: none; }
+    .app-detail.reverse { direction: rtl; }
+    .app-detail.reverse > * { direction: ltr; }
+    .app-detail-label {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+    .app-detail h2 { font-size: 28px; font-weight: 800; color: var(--navy); margin-bottom: 6px; }
+    .app-detail .tagline { font-size: 14px; color: var(--muted); font-style: italic; margin-bottom: 20px; }
+    .app-detail p { font-size: 15px; color: var(--slate); line-height: 1.75; margin-bottom: 16px; }
+    .feature-list { list-style: none; margin-bottom: 24px; }
+    .feature-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 14px;
+      color: var(--slate);
+      padding: 7px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .feature-list li:last-child { border-bottom: none; }
+    .feature-list li::before {
+      content: "✓";
+      font-weight: 700;
+      font-size: 13px;
+      margin-top: 1px;
+      flex-shrink: 0;
+    }
+    .plan-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .plan-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 100px;
+    }
+    .app-visual {
+      background: var(--navy);
+      border-radius: 20px;
+      padding: 36px 28px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .app-visual::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,255,255,0.07) 0%, transparent 70%);
+    }
+    .app-visual-letter {
+      font-size: 80px;
+      font-weight: 800;
+      color: rgba(255,255,255,0.9);
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+    .app-visual-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #F8FAFC;
+      margin-bottom: 6px;
+    }
+    .app-visual-sub {
+      font-size: 12px;
+      color: #64748B;
+      font-style: italic;
+    }
+    .aida-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(37,99,235,0.15);
+      border: 1px solid rgba(37,99,235,0.3);
+      border-radius: 100px;
+      padding: 6px 14px;
+      margin-top: 20px;
+    }
+    .aida-badge .a { width: 20px; height: 20px; border-radius: 50%; background: #2563EB; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; font-style: italic; }
+    .aida-badge span { font-size: 12px; color: #93C5FD; font-weight: 600; }
+
+    /* ── PRIVACY PAGE ───────────────────────────────────────── */
+    .privacy-page {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 64px 24px 80px;
+    }
+    .privacy-page h1 {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+    .privacy-page .effective {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 40px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+    .privacy-page h2 {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--navy);
+      margin: 32px 0 10px;
+    }
+    .privacy-page p {
+      font-size: 14px;
+      color: var(--slate);
+      line-height: 1.8;
+      margin-bottom: 12px;
+    }
+    .privacy-page ul {
+      margin: 0 0 14px 18px;
+    }
+    .privacy-page ul li {
+      font-size: 14px;
+      color: var(--slate);
+      line-height: 1.8;
+      margin-bottom: 5px;
+    }
+    .privacy-highlight {
+      background: #EFF6FF;
+      border-left: 3px solid var(--blue);
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin: 20px 0;
+    }
+    .privacy-highlight p { margin: 0; color: #1E40AF; font-size: 13px; }
+
+    /* ── ABOUT PAGE ─────────────────────────────────────────── */
+    .about-page { max-width: var(--max); margin: 0 auto; padding: 64px 24px 80px; }
+    .about-hero {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+      margin-bottom: 80px;
+    }
+    .about-hero h1 {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 800;
+      color: var(--navy);
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .about-hero p {
+      font-size: 16px;
+      color: var(--slate);
+      line-height: 1.75;
+      margin-bottom: 16px;
+    }
+    .about-visual {
+      background: var(--navy);
+      border-radius: 20px;
+      padding: 48px 36px;
+      text-align: center;
+    }
+    .about-pvx {
+      margin: 0 auto 24px;
+    }
+    .about-pvx svg { width: 160px; height: 80px; }
+    .about-company { font-size: 22px; font-weight: 800; color: #F8FAFC; letter-spacing: 0.1em; margin-bottom: 4px; }
+    .about-labs { font-size: 11px; font-weight: 500; color: #475569; letter-spacing: 0.3em; text-transform: uppercase; margin-bottom: 16px; }
+    .about-tagline-txt { font-size: 13px; color: #64748B; }
+
+    .what-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 64px;
+    }
+    .what-card {
+      border-radius: 14px;
+      padding: 24px;
+      border: 1px solid;
+    }
+    .what-card h3 { font-size: 15px; font-weight: 700; margin-bottom: 14px; }
+    .what-card ul { list-style: none; }
+    .what-card ul li {
+      font-size: 13px;
+      line-height: 1.7;
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+    .what-card ul li:last-child { border-bottom: none; }
+    .what-card.is { background: #F0FDF4; border-color: #BBF7D0; }
+    .what-card.is h3 { color: #15803D; }
+    .what-card.is li::before { content: "✓"; color: #16A34A; font-weight: 700; }
+    .what-card.not { background: #FFF1F2; border-color: #FECDD3; }
+    .what-card.not h3 { color: #DC2626; }
+    .what-card.not li::before { content: "✕"; color: #DC2626; font-weight: 700; }
+
+    .disclaimer-box {
+      background: var(--off);
+      border: 1px solid var(--line);
+      border-left: 4px solid var(--muted);
+      border-radius: 10px;
+      padding: 24px;
+      margin-bottom: 48px;
+    }
+    .disclaimer-box h3 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 8px; }
+    .disclaimer-box p { font-size: 13px; color: var(--slate); line-height: 1.75; }
+
+    .contact-section { text-align: center; }
+    .contact-section h2 { font-size: 24px; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
+    .contact-section p { font-size: 15px; color: var(--muted); margin-bottom: 24px; }
+    .contact-links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: opacity 0.15s;
+    }
+    .contact-link:hover { opacity: 0.8; }
+    .contact-link.email { background: var(--navy); color: #F8FAFC; }
+    .contact-link.web   { background: var(--off); color: var(--navy); border: 1px solid var(--line); }
+
+    /* ── Footer ─────────────────────────────────────────────── */
+    footer {
+      background: var(--navy);
+      padding: 40px 24px;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    footer p { font-size: 12px; color: #475569; line-height: 1.8; }
+    footer a { color: #64748B; }
+    footer a:hover { color: #94A3B8; }
+
+    /* ── Responsive ─────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .app-detail { grid-template-columns: 1fr; }
+      .app-detail.reverse { direction: ltr; }
+      .about-hero { grid-template-columns: 1fr; }
+      .what-grid { grid-template-columns: 1fr; }
+      .hero-apps { gap: 8px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Navigation ────────────────────────────────────────────── -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo" onclick="showPage('home')" style="cursor:pointer">
+      <div class="nav-diamond">
+        <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="18,2 34,18 18,34 2,18" fill="rgba(255,255,255,0.06)" stroke="#fff" stroke-width="2" stroke-linejoin="miter"/>
+          <text x="18" y="23" text-anchor="middle" font-size="11" font-weight="800" fill="#F8FAFC" letter-spacing="1" font-family="system-ui,sans-serif">PVX</text>
+        </svg>
+      </div>
+      <div class="nav-brand">PORTAVEX<span>LABS</span></div>
+    </div>
+    <ul class="nav-links">
+      <li><a onclick="showPage('home')"    id="nav-home">Home</a></li>
+      <li><a onclick="showPage('apps')"    id="nav-apps">Our Apps</a></li>
+      <li><a onclick="showPage('about')"   id="nav-about">About</a></li>
+      <li><a onclick="showPage('privacy')" id="nav-privacy">Privacy</a></li>
+      <li><a href="mailto:inquiries@portavexinvestorlabs.com" class="nav-cta">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PAGE: HOME
+══════════════════════════════════════════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <!-- Hero -->
+  <section class="hero">
+    <div style="position:relative;z-index:1;">
+      <div class="hero-diamond">
+        <svg viewBox="0 0 220 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="110,4 218,55 110,106 2,55" fill="rgba(255,255,255,0.06)" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="miter"/>
+          <text x="113" y="70" text-anchor="middle" font-size="38" font-weight="800" fill="#F8FAFC" letter-spacing="4" font-family="system-ui,sans-serif">PVX</text>
+        </svg>
+      </div>
+      <h1>PORTAVEX</h1>
+      <p class="hero-sub">Labs</p>
+      <p class="hero-tagline">Empowering smarter investment decisions.</p>
+      <div class="hero-apps">
+        <div class="hero-app-pill" onclick="showPage('apps')">
+          <div class="pill-letter" style="background:#2563EB;">A</div>
+          <span>Analyze</span>
+        </div>
+        <div class="hero-app-pill" onclick="showPage('apps')">
+          <div class="pill-letter" style="background:#7C3AED;">C</div>
+          <span>Compare</span>
+        </div>
+        <div class="hero-app-pill" onclick="showPage('apps')">
+          <div class="pill-letter" style="background:#0D9488;">S</div>
+          <span>Screen</span>
+        </div>
+        <div class="hero-app-pill" onclick="showPage('apps')">
+          <div class="pill-letter" style="background:#D97706;">E</div>
+          <span>Educate</span>
+        </div>
+      </div>
+      <div class="hero-btn" onclick="showPage('apps')">Explore Our Apps →</div>
+    </div>
+  </section>
+
+  <!-- Mission -->
+  <section class="mission">
+    <div class="mission-inner">
+      <p class="eyebrow">Our Mission</p>
+      <h2>Professional-grade tools for self-directed investors</h2>
+      <p>Built from 20+ years of advising clients and training financial advisors — Portavex puts the same analytical tools used by professionals directly in the hands of everyday investors. No bias. No sales agenda. No brokerage affiliation.</p>
+    </div>
+  </section>
+
+  <!-- App cards -->
+  <section class="home-apps">
+    <div class="section-header">
+      <p class="eyebrow">The CASE Suite</p>
+      <h2>Four apps. One platform.</h2>
+      <p>Analyze, Compare, Screen, and Educate — each app tackles a distinct challenge facing self-directed investors.</p>
+    </div>
+    <div class="apps-grid">
+      <div class="app-card analyze" onclick="showPage('apps')" style="cursor:pointer">
+        <div class="app-icon-box" style="background:#2563EB;">A</div>
+        <h3>Portavex: Analyze</h3>
+        <p class="app-tagline">Your Personal Portfolio Analyst</p>
+        <p>AI-powered portfolio risk analysis across volatility, diversification, strategy alignment, and sector exposure. Powered by AIDA.</p>
+        <div class="app-pill-row">
+          <span class="app-pill" style="color:#2563EB;border-color:#BFDBFE;background:#EFF6FF;">US & CA Stocks</span>
+          <span class="app-pill" style="color:#7C3AED;border-color:#DDD6FE;background:#F5F3FF;">Crypto</span>
+          <span class="app-pill" style="color:#15803D;border-color:#BBF7D0;background:#F0FDF4;">Bonds</span>
+          <span class="app-pill" style="color:#B45309;border-color:#FDE68A;background:#FFFBEB;">Metals</span>
+        </div>
+      </div>
+      <div class="app-card compare" onclick="showPage('apps')" style="cursor:pointer">
+        <div class="app-icon-box" style="background:#7C3AED;">C</div>
+        <h3>Portavex: Compare</h3>
+        <p class="app-tagline">Side-by-Side Investment Comparison</p>
+        <p>Compare any two stocks or ETFs head-to-head across fundamentals, performance, risk, and valuation metrics.</p>
+        <div class="app-pill-row">
+          <span class="app-pill" style="color:#7C3AED;border-color:#DDD6FE;background:#F5F3FF;">Stocks</span>
+          <span class="app-pill" style="color:#7C3AED;border-color:#DDD6FE;background:#F5F3FF;">ETFs</span>
+          <span class="app-pill" style="color:#7C3AED;border-color:#DDD6FE;background:#F5F3FF;">US & Canada</span>
+        </div>
+      </div>
+      <div class="app-card screen" onclick="showPage('apps')" style="cursor:pointer">
+        <div class="app-icon-box" style="background:#0D9488;">S</div>
+        <h3>Portavex: Screen</h3>
+        <p class="app-tagline">Your AI Stock Screener</p>
+        <p>Describe the stocks you're looking for in plain English — AIDA interprets your criteria and screens 1,000+ US and Canadian stocks instantly.</p>
+        <div class="app-pill-row">
+          <span class="app-pill" style="color:#0D9488;border-color:#99F6E4;background:#F0FDFA;">Natural Language</span>
+          <span class="app-pill" style="color:#0D9488;border-color:#99F6E4;background:#F0FDFA;">1,000+ Stocks</span>
+        </div>
+      </div>
+      <div class="app-card" style="border-color:#FDE68A;cursor:pointer;" onclick="showPage('apps')">
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:#D97706;"></div>
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+          <div class="app-icon-box" style="background:#D97706;margin:0;">E</div>
+          <span style="background:#FEF9C3;color:#A16207;font-size:11px;font-weight:700;padding:4px 10px;border-radius:100px;border:1px solid #FDE68A;">Coming Soon</span>
+        </div>
+        <h3>Portavex: Educate</h3>
+        <p class="app-tagline">Your Investor Education Companion</p>
+        <p>Six structured learning paths built for self-directed investors — from investing basics to advanced portfolio management and risk analysis.</p>
+        <div class="app-pill-row">
+          <span class="app-pill" style="color:#D97706;border-color:#FDE68A;background:#FFFBEB;">6 Learning Paths</span>
+          <span class="app-pill" style="color:#D97706;border-color:#FDE68A;background:#FFFBEB;">Free & Pro</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Disclaimer -->
+  <div class="disclaimer-strip">
+    <p>For educational and informational purposes only. Nothing on this website or in any Portavex application constitutes financial advice or a recommendation to buy or sell any security. Always consult a qualified financial advisor before making investment decisions. © 2025 Portavex Labs Inc.</p>
+  </div>
+
+  <footer>
+    <p>
+      © 2025 Portavex Labs Inc. · Toronto, Ontario, Canada<br/>
+      <a onclick="showPage('privacy')" style="cursor:pointer;">Privacy Policy</a> · 
+      <a href="mailto:inquiries@portavexinvestorlabs.com">inquiries@portavexinvestorlabs.com</a>
+    </p>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PAGE: OUR APPS
+══════════════════════════════════════════════════════════════════ -->
+<div id="page-apps" class="page">
+  <div style="background:var(--navy);padding:64px 24px 56px;text-align:center;">
+    <p class="eyebrow" style="color:#60A5FA;">The CASE Suite</p>
+    <h1 style="font-size:clamp(28px,5vw,48px);font-weight:800;color:#F8FAFC;margin-bottom:12px;">Analyze. Compare. Screen. Educate.</h1>
+    <p style="font-size:16px;color:#64748B;max-width:560px;margin:0 auto;">Four iOS apps built for self-directed investors who want professional-grade tools without the advisor fees or brokerage affiliation.</p>
+  </div>
+
+  <div class="apps-page" style="padding-top:64px;">
+
+    <!-- Analyze -->
+    <div class="app-detail">
+      <div>
+        <div class="app-detail-label">
+          <div class="app-icon-box" style="background:#2563EB;margin:0;">A</div>
+          <div>
+            <h2 style="margin:0;">Portavex: Analyze</h2>
+            <p style="font-size:13px;color:var(--muted);margin:0;font-style:italic;">Your Personal Portfolio Analyst</p>
+          </div>
+        </div>
+        <p>Portavex: Analyze gives self-directed investors professional-grade portfolio analysis tools — without the advisor fees, sales agenda, or brokerage affiliation. Enter your holdings and AIDA does the rest.</p>
+        <p>Understand your real risk, where you're concentrated, how your portfolio aligns to your chosen strategy, and what sectors you may be missing — all in one place.</p>
+        <ul class="feature-list" style="--check:#2563EB;">
+          <li>Portfolio volatility and risk band rating</li>
+          <li>HHI concentration score</li>
+          <li>Strategy alignment grade (Aggressive, Growth, Blend, Income)</li>
+          <li>Correlation heatmap across all holdings</li>
+          <li>Sector, asset type, and product allocation charts</li>
+          <li>AIDA spoken walkthrough — page scrolls automatically</li>
+          <li>Ask AIDA anything about your portfolio</li>
+          <li>15+ advanced tools: Monte Carlo, Stress Test, Tax Efficiency, Timeline Projector, and more</li>
+          <li>US Stocks, ETFs, Canadian Stocks, Crypto, Bonds, Precious Metals</li>
+        </ul>
+        <div class="plan-row">
+          <span class="plan-badge" style="background:#F1F5F9;color:#475569;">Free · 10 holdings</span>
+          <span class="plan-badge" style="background:#EFF6FF;color:#2563EB;">Pro · $4.99/mo</span>
+          <span class="plan-badge" style="background:#F5F3FF;color:#7C3AED;">Elite · $9.99/mo</span>
+        </div>
+      </div>
+      <div>
+        <div class="app-visual">
+          <div class="app-visual-letter">A</div>
+          <div class="app-visual-name">Portavex: Analyze</div>
+          <div class="app-visual-sub">Your Personal Portfolio Analyst</div>
+          <div class="aida-badge">
+            <div class="a">A</div>
+            <span>Powered by AIDA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Compare -->
+    <div class="app-detail reverse">
+      <div>
+        <div class="app-detail-label">
+          <div class="app-icon-box" style="background:#7C3AED;margin:0;">C</div>
+          <div>
+            <h2 style="margin:0;">Portavex: Compare</h2>
+            <p style="font-size:13px;color:var(--muted);margin:0;font-style:italic;">Side-by-Side Investment Comparison</p>
+          </div>
+        </div>
+        <p>Compare any two stocks or ETFs head-to-head across the metrics that matter — fundamentals, valuation, performance, risk, and dividends. Covers US and Canadian equities including TSX-listed stocks and ETFs.</p>
+        <p>Built for investors who want to understand the difference between two similar investments before deciding which belongs in their portfolio.</p>
+        <ul class="feature-list">
+          <li>Side-by-side fundamental comparison</li>
+          <li>Valuation metrics — P/E, P/B, Price/FCF</li>
+          <li>Performance — 1yr, 3yr, 5yr returns</li>
+          <li>Risk metrics — Beta, volatility, short interest</li>
+          <li>Dividend yield and payout history</li>
+          <li>US stocks, Canadian stocks (.TO), and ETFs</li>
+          <li>Popular comparison templates</li>
+          <li>Share results as image</li>
+        </ul>
+        <div class="plan-row">
+          <span class="plan-badge" style="background:#F1F5F9;color:#475569;">Free</span>
+          <span class="plan-badge" style="background:#F5F3FF;color:#7C3AED;">Pro · Unlimited comparisons</span>
+        </div>
+      </div>
+      <div>
+        <div class="app-visual" style="background:linear-gradient(135deg,#1E1B4B,#312E81);">
+          <div class="app-visual-letter">C</div>
+          <div class="app-visual-name">Portavex: Compare</div>
+          <div class="app-visual-sub">Side-by-Side Investment Comparison</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen -->
+    <div class="app-detail">
+      <div>
+        <div class="app-detail-label">
+          <div class="app-icon-box" style="background:#0D9488;margin:0;">S</div>
+          <div>
+            <h2 style="margin:0;">Portavex: Screen</h2>
+            <p style="font-size:13px;color:var(--muted);margin:0;font-style:italic;">Your AI Stock Screener</p>
+          </div>
+        </div>
+        <p>Just describe what you're looking for in plain English — "US regional banks with above-average free cash flow and a buy rating" — and AIDA interprets your criteria, builds the filters, and screens 1,000+ US and Canadian stocks instantly.</p>
+        <p>No more fiddling with sliders and dropdowns. Natural language screening with intelligent fallback — if your criteria are too strict, AIDA progressively relaxes them and tells you exactly what it changed.</p>
+        <ul class="feature-list">
+          <li>Natural language screening via AIDA</li>
+          <li>Voice input — just speak your criteria</li>
+          <li>1,000+ US and Canadian stocks</li>
+          <li>20+ screening criteria — P/E, FCF, dividend yield, beta, analyst rating, and more</li>
+          <li>Intelligent 4-pass fallback — always returns results</li>
+          <li>Sector-aware thresholds (banks, tech, healthcare)</li>
+          <li>Manual filter mode for precise control</li>
+          <li>Screen history and result export</li>
+        </ul>
+        <div class="plan-row">
+          <span class="plan-badge" style="background:#F1F5F9;color:#475569;">Free · 5 criteria</span>
+          <span class="plan-badge" style="background:#F0FDFA;color:#0D9488;">Pro · $2.99/mo</span>
+          <span class="plan-badge" style="background:#F0FDFA;color:#0D9488;">Elite · $4.99/mo</span>
+        </div>
+      </div>
+      <div>
+        <div class="app-visual" style="background:linear-gradient(135deg,#042F2E,#0F766E);">
+          <div class="app-visual-letter">S</div>
+          <div class="app-visual-name">Portavex: Screen</div>
+          <div class="app-visual-sub">Your AI Stock Screener</div>
+          <div class="aida-badge" style="border-color:rgba(13,148,136,0.4);background:rgba(13,148,136,0.15);">
+            <div class="a" style="background:#0D9488;">A</div>
+            <span style="color:#5EEAD4;">Powered by AIDA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Educate -->
+    <div class="app-detail reverse">
+      <div>
+        <div class="app-detail-label">
+          <div class="app-icon-box" style="background:#D97706;margin:0;">E</div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <div>
+              <h2 style="margin:0;">Portavex: Educate</h2>
+              <p style="font-size:13px;color:var(--muted);margin:0;font-style:italic;">Your Investor Education Companion</p>
+            </div>
+            <span style="background:#FEF9C3;color:#A16207;font-size:11px;font-weight:700;padding:4px 12px;border-radius:100px;border:1px solid #FDE68A;white-space:nowrap;">Coming Soon</span>
+          </div>
+        </div>
+        <p>Portavex: Educate is the fourth app in the CASE suite — a structured, self-paced learning platform designed to give self-directed investors the financial knowledge they need to make better decisions.</p>
+        <p>Whether you're just starting out or looking to sharpen your understanding of advanced concepts, Educate walks you through the fundamentals at your own pace — with lessons built specifically around the tools and concepts used across the Portavex suite.</p>
+        <ul class="feature-list">
+          <li>Six structured learning paths — Investing Basics, Portfolio Management, Risk & Diversification, Stocks & ETFs, Fixed Income, and Crypto</li>
+          <li>Bite-sized lessons designed for self-directed investors</li>
+          <li>Quizzes and progress tracking</li>
+          <li>Tied directly to concepts used in Analyze, Compare, and Screen</li>
+          <li>Free and Pro tiers</li>
+        </ul>
+        <div style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:12px;padding:20px;margin-top:8px;">
+          <p style="font-size:13px;font-weight:700;color:#92400E;margin-bottom:6px;">🎓 Launching Soon</p>
+          <p style="font-size:13px;color:#78350F;line-height:1.7;margin:0;">Portavex: Educate is currently in development. Stay tuned for the launch announcement — follow us or check back here for updates.</p>
+        </div>
+      </div>
+      <div>
+        <div class="app-visual" style="background:linear-gradient(135deg,#451A03,#92400E);">
+          <div class="app-visual-letter">E</div>
+          <div class="app-visual-name">Portavex: Educate</div>
+          <div class="app-visual-sub">Your Investor Education Companion</div>
+          <div style="margin-top:24px;display:flex;flex-direction:column;gap:8px;">
+            <div style="background:rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;text-align:left;display:flex;align-items:center;gap:10px;">
+              <span style="font-size:16px;">📈</span>
+              <span style="font-size:12px;color:#FDE68A;font-weight:600;">Investing Basics</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;text-align:left;display:flex;align-items:center;gap:10px;">
+              <span style="font-size:16px;">🎯</span>
+              <span style="font-size:12px;color:#FDE68A;font-weight:600;">Portfolio Management</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;text-align:left;display:flex;align-items:center;gap:10px;">
+              <span style="font-size:16px;">🛡️</span>
+              <span style="font-size:12px;color:#FDE68A;font-weight:600;">Risk & Diversification</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.08);border-radius:8px;padding:10px 14px;text-align:left;display:flex;align-items:center;gap:10px;">
+              <span style="font-size:16px;">📚</span>
+              <span style="font-size:12px;color:#FDE68A;font-weight:600;">+ 3 more learning paths</span>
+            </div>
+          </div>
+          <div style="margin-top:20px;background:rgba(217,119,6,0.3);border:1px solid rgba(217,119,6,0.5);border-radius:100px;padding:6px 16px;display:inline-block;">
+            <span style="font-size:12px;color:#FDE68A;font-weight:700;">🚀 Coming Soon</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="disclaimer-strip">
+    <p>All apps are for educational and informational purposes only. Nothing in any Portavex application constitutes financial advice. Always consult a qualified financial advisor. © 2025 Portavex Labs Inc.</p>
+  </div>
+  <footer>
+    <p>© 2025 Portavex Labs Inc. · Toronto, Ontario, Canada<br/>
+    <a onclick="showPage('privacy')" style="cursor:pointer;">Privacy Policy</a> · <a href="mailto:inquiries@portavexinvestorlabs.com">inquiries@portavexinvestorlabs.com</a></p>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PAGE: ABOUT
+══════════════════════════════════════════════════════════════════ -->
+<div id="page-about" class="page">
+  <div class="about-page">
+
+    <div class="about-hero">
+      <div>
+        <p class="eyebrow">About Portavex Labs</p>
+        <h1>Built by advisors.<br/>Built for investors.</h1>
+        <p>Portavex Labs was founded on a simple observation — the tools that professional financial advisors use to analyze portfolios have never been available to the self-directed investors who need them most.</p>
+        <p>Built from 20+ years of experience advising clients and training financial advisors, Portavex delivers the same analytical depth in the palm of your hand — without the bias, without the sales agenda, and without the brokerage affiliation.</p>
+        <p>We are based in Toronto, Ontario, Canada.</p>
+      </div>
+      <div>
+        <div class="about-visual">
+          <div class="about-pvx">
+            <svg viewBox="0 0 220 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <polygon points="110,4 218,55 110,106 2,55" fill="rgba(255,255,255,0.06)" stroke="#FFFFFF" stroke-width="4" stroke-linejoin="miter"/>
+              <text x="113" y="70" text-anchor="middle" font-size="38" font-weight="800" fill="#F8FAFC" letter-spacing="4" font-family="system-ui,sans-serif">PVX</text>
+            </svg>
+          </div>
+          <div class="about-company">PORTAVEX</div>
+          <div class="about-labs">Labs</div>
+          <div class="about-tagline-txt">Empowering smarter investment decisions.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mission -->
+    <div style="background:var(--navy);border-radius:16px;padding:40px;margin-bottom:48px;">
+      <p class="eyebrow" style="color:#60A5FA;">Our Mission</p>
+      <p style="font-size:16px;color:#CBD5E1;line-height:1.8;margin-top:8px;">Portavex was built to give everyday investors the same quality of portfolio insight that was previously only available through a financial advisor — delivered without bias, without a sales agenda, and without affiliation to any trading platform, crypto exchange, or financial services firm.</p>
+    </div>
+
+    <!-- What we are / aren't -->
+    <div class="what-grid">
+      <div class="what-card is">
+        <h3>What Portavex Is</h3>
+        <ul>
+          <li>An independent, unbiased portfolio education platform</li>
+          <li>A suite of AI-powered analysis and screening tools</li>
+          <li>Built for self-directed investors who want clarity</li>
+          <li>Completely private — analysis runs on your device</li>
+          <li>Covers 1,000+ US and Canadian publicly traded stocks</li>
+        </ul>
+      </div>
+      <div class="what-card not">
+        <h3>What Portavex Is Not</h3>
+        <ul>
+          <li>Not affiliated with any trading platform or brokerage</li>
+          <li>Not affiliated with any crypto exchange</li>
+          <li>Not affiliated with any financial services firm</li>
+          <li>Not a source of financial advice or trade recommendations</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="disclaimer-box">
+      <h3>Important Disclaimer</h3>
+      <p>All Portavex applications and this website are for educational and informational purposes only. Nothing produced by Portavex constitutes financial advice or a recommendation to buy or sell any security. Always consult a qualified financial advisor before making investment decisions. Past performance and modelled risk metrics are not indicative of future results.</p>
+    </div>
+
+    <!-- Contact -->
+    <div class="contact-section">
+      <h2>Get in Touch</h2>
+      <p>Questions, feedback, or partnership inquiries — we'd love to hear from you.</p>
+      <div class="contact-links">
+        <a href="mailto:inquiries@portavexinvestorlabs.com" class="contact-link email">✉️ &nbsp;inquiries@portavexinvestorlabs.com</a>
+        <a href="https://www.portavexinvestorlabs.com" class="contact-link web">🌐 &nbsp;portavexinvestorlabs.com</a>
+      </div>
+    </div>
+
+  </div>
+  <footer>
+    <p>© 2025 Portavex Labs Inc. · Toronto, Ontario, Canada<br/>
+    <a onclick="showPage('privacy')" style="cursor:pointer;">Privacy Policy</a> · <a href="mailto:inquiries@portavexinvestorlabs.com">inquiries@portavexinvestorlabs.com</a></p>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════
+     PAGE: PRIVACY
+══════════════════════════════════════════════════════════════════ -->
+<div id="page-privacy" class="page">
+  <div class="privacy-page">
+    <h1>Privacy Policy</h1>
+    <p class="effective">Effective Date: July 1, 2025 &nbsp;·&nbsp; Last Updated: July 1, 2025</p>
+
+    <div class="privacy-highlight">
+      <p>Portavex Labs Inc. is committed to protecting your privacy. This policy applies to all Portavex mobile applications — Portavex: Analyze, Portavex: Compare, Portavex: Screen, and Portavex: Educate — and to this website.</p>
+    </div>
+
+    <h2>1. Information We Collect</h2>
+    <p>We collect the following types of information when you use our Apps:</p>
+    <ul>
+      <li><strong>Information you provide directly:</strong> Your name (optional, for personalization only), portfolio data you enter manually, and screening criteria you set.</li>
+      <li><strong>Usage data:</strong> How you interact with the Apps, in aggregate and not linked to your identity.</li>
+      <li><strong>Device information:</strong> Device type, operating system version, and app version, used for compatibility and bug fixing.</li>
+      <li><strong>Purchase information:</strong> Subscription status managed through Apple's App Store and RevenueCat. We do not store or process your payment card details.</li>
+      <li><strong>AI query content:</strong> When you use AIDA, your queries are sent to Anthropic's Claude API via a secure server-side proxy. We do not store your query history beyond the duration of your session.</li>
+    </ul>
+
+    <h2>2. Information We Do Not Collect</h2>
+    <ul>
+      <li>We do not collect your brokerage account credentials or connect to your brokerage.</li>
+      <li>We do not collect your Social Insurance Number, Social Security Number, or government-issued ID.</li>
+      <li>We do not sell, rent, or share your personal information with third-party advertisers.</li>
+      <li>Our Apps are ad-free. We do not display advertising.</li>
+      <li>We do not collect your precise location.</li>
+    </ul>
+
+    <h2>3. How We Use Your Information</h2>
+    <ul>
+      <li>Provide, maintain, and improve the Apps</li>
+      <li>Process subscription purchases and verify entitlements</li>
+      <li>Personalize your in-app experience</li>
+      <li>Diagnose technical issues and crashes</li>
+      <li>Respond to your support requests</li>
+      <li>Comply with legal obligations</li>
+    </ul>
+
+    <h2>4. Third-Party Services</h2>
+    <ul>
+      <li><strong>Apple App Store</strong> — subscription billing and purchase validation.</li>
+      <li><strong>RevenueCat</strong> — subscription management and entitlement verification.</li>
+      <li><strong>Anthropic (Claude API)</strong> — AI-powered query interpretation via AIDA. Queries are routed through our secure server-side proxy.</li>
+      <li><strong>Supabase</strong> — backend database and server functions, hosted on secure cloud infrastructure.</li>
+    </ul>
+
+    <h2>5. Data Storage and Security</h2>
+    <p>Portfolio data you enter is stored locally on your device using encrypted storage. It is not transmitted to our servers unless you use a feature that requires it (such as AI analysis). All data transmission uses HTTPS/TLS encryption.</p>
+
+    <h2>6. Data Retention</h2>
+    <p>Locally stored data remains on your device until you delete the App or clear its data. Server-side session data used for AI queries is not retained after your session ends.</p>
+
+    <h2>7. Children's Privacy</h2>
+    <p>Our Apps are not directed at children under the age of 13. We do not knowingly collect personal information from children. If you believe a child has provided us with personal information, please contact us and we will delete it promptly.</p>
+
+    <h2>8. Your Rights</h2>
+    <p>Depending on your jurisdiction, you may have the right to access, correct, or delete your personal information, and to withdraw consent. To exercise any of these rights, please contact us at the address below.</p>
+
+    <h2>9. Canadian Privacy Rights (PIPEDA)</h2>
+    <p>Portavex Labs Inc. is incorporated in Canada and complies with the Personal Information Protection and Electronic Documents Act (PIPEDA). You have the right to access your personal information and to challenge its accuracy.</p>
+
+    <h2>10. California Privacy Rights (CCPA)</h2>
+    <p>If you are a California resident, you have additional rights under the California Consumer Privacy Act. We do not sell personal information. To make a request, contact us at the address below.</p>
+
+    <h2>11. Changes to This Policy</h2>
+    <p>We may update this Privacy Policy from time to time. We will update the "Last Updated" date at the top of this page when we do. Continued use of our Apps after changes constitutes acceptance of the updated policy.</p>
+
+    <h2>12. Contact Us</h2>
+    <ul>
+      <li><strong>Company:</strong> Portavex Labs Inc.</li>
+      <li><strong>Location:</strong> Toronto, Ontario, Canada</li>
+      <li><strong>Email:</strong> <a href="mailto:privacy@portavexinvestorlabs.com" style="color:var(--blue);">privacy@portavexinvestorlabs.com</a></li>
+    </ul>
+    <p style="margin-top:12px;">We will respond to all privacy inquiries within 30 days.</p>
+  </div>
+  <footer>
+    <p>© 2025 Portavex Labs Inc. · Toronto, Ontario, Canada<br/>
+    <a href="mailto:inquiries@portavexinvestorlabs.com">inquiries@portavexinvestorlabs.com</a></p>
+  </footer>
+</div>
+
+<!-- ── JS ────────────────────────────────────────────────────── -->
+<script>
+  function showPage(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+    document.getElementById('page-' + id).classList.add('active');
+    const navEl = document.getElementById('nav-' + id);
+    if (navEl) navEl.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  // Set home active on load
+  showPage('home');
+</script>
+
+</body>
+</html>
